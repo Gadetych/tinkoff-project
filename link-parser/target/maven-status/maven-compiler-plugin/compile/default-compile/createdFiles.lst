@@ -1,0 +1,5 @@
+ru\tinkoff\edu\java\parser\LinkParserApplication.class
+ru\tinkoff\edu\java\parser\links\impl\StackOverflowLinks.class
+ru\tinkoff\edu\java\parser\Parser.class
+ru\tinkoff\edu\java\parser\links\Links.class
+ru\tinkoff\edu\java\parser\links\impl\GitHubLinks.class
