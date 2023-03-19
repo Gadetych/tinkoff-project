@@ -1,8 +1,9 @@
 package ru.tinkoff.edu.java.parser;
 
-import ru.tinkoff.edu.java.parser.links.Links;
-import ru.tinkoff.edu.java.parser.links.impl.GitHubLinks;
-import ru.tinkoff.edu.java.parser.links.impl.StackOverflowLinks;
+import ru.tinkoff.edu.java.parser.links.LinkParse;
+import ru.tinkoff.edu.java.parser.links.GitHubLinkParse;
+import ru.tinkoff.edu.java.parser.links.StackOverflowLinkParse;
+import ru.tinkoff.edu.java.parser.result.ParseResult;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -15,10 +16,10 @@ public class LinkParserApplication {
 
     private static void init() {
         parser = new Parser();
-        Links supportedLinks = Links.link(
-                new GitHubLinks(),
-                new StackOverflowLinks());
-        parser.setLinks(supportedLinks);
+        LinkParse supportedLinkParse = LinkParse.link(
+                new GitHubLinkParse(),
+                new StackOverflowLinkParse());
+        parser.setLinks(supportedLinkParse);
     }
 
     public static void main(String[] args) throws IOException {
@@ -31,8 +32,8 @@ public class LinkParserApplication {
             if (Objects.equals(input, "exit")) {
                 break;
             }
-            Links links = parser.checkLink(input);
-            System.out.println(links == null ? null : links.toString());
+            ParseResult parseResult = parser.checkLink(input);
+            System.out.println(parseResult == null ? null : parseResult.getResult());
         }
     }
 }
