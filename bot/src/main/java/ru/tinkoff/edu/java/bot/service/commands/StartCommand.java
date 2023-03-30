@@ -1,23 +1,23 @@
-package ru.tinkoff.edu.java.bot.service.command;
+package ru.tinkoff.edu.java.bot.service.commands;
 
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import org.springframework.stereotype.Component;
 
 @Component
-public class TrackCommand implements Command{
+public class StartCommand implements Command{
     @Override
     public String command() {
-        return "/track";
+        return "/start";
     }
 
     @Override
     public String description() {
-        return "начать отслеживание ссылки";
+        return "регистрация пользователя";
     }
 
     @Override
     public SendMessage handle(Update update) {
-        return new SendMessage(update.message().chat().id(),"ссылка ослеживается");
+        return new SendMessage(update.message().chat().id(),"пользователь зарегестрирован");
     }
 }

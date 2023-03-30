@@ -1,7 +1,6 @@
-package ru.tinkoff.edu.java.bot.service;
+package ru.tinkoff.edu.java.bot.service.commands;
 
 import org.springframework.stereotype.Component;
-import ru.tinkoff.edu.java.bot.service.command.*;
 
 import java.util.List;
 
