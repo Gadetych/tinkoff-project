@@ -1,14 +1,15 @@
 package ru.tinkoff.edu.java.bot.service.commands;
 
 import org.springframework.stereotype.Component;
+import ru.tinkoff.edu.java.bot.service.commands.impl.*;
 
 import java.util.List;
 
 @Component
-public class ListComands {
+public class CommandList {
     private final List<Command> commandList;
 
-    public ListComands(StartCommand start, HelpCommand help, TrackCommand track,
+    public CommandList(StartCommand start, HelpCommand help, TrackCommand track,
                        UntrackCommand untrack, ListCommand listCommand) {
         this.commandList = List.of(start, help, track, untrack, listCommand);
     }
