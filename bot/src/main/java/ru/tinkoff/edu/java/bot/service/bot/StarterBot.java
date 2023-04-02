@@ -42,7 +42,6 @@ public class StarterBot implements Bot {
     public int process(List<Update> updates) {
         updates.forEach(update -> {
             Message message = update.message();
-
             if(message != null) {
                 SendResponse sendResponse = null;
                 for (Command c : listComands.getCommandList()){
