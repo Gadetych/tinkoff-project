@@ -1,4 +1,4 @@
-package ru.tinkoff.edu.java.scrapper.dto;
+package ru.tinkoff.edu.java.scrapper.model.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
@@ -8,7 +8,7 @@ import java.time.OffsetDateTime;
 
 @Data
 @NoArgsConstructor
-public class GitHubRepositoryInfoDto {
+public class GitHubRepositoryInfoResponse {
     private Long id;
     private String name;
     @JsonProperty("full_name")

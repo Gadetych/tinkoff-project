@@ -1,4 +1,4 @@
-package ru.tinkoff.edu.java.scrapper.dto;
+package ru.tinkoff.edu.java.scrapper.model.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
@@ -9,7 +9,7 @@ import java.util.List;
 
 @Data
 @NoArgsConstructor
-public class StackOverflowQuestionInfoDto {
+public class StackOverflowQuestionInfoResponse {
     private List<Items> items;
     @JsonProperty("has_more")
     private Boolean hasMore;
