@@ -11,17 +11,20 @@ import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.netty.http.client.HttpClient;
 
+import java.net.URI;
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
 @Configuration
 
-public class ClientConfiguration {
+public class ClientConfig {
     public static final int TIMEOUT = 5000;
     @Value("${github.webclient.base-url}")
     private String gitHubBaseUrl;
     @Value("${stackoverflow.webclient.base-url}")
     private String stackOverflowBaseUrl;
+    @Value("${bot.webclient.base-url}")
+    private URI botBaseUrl;
 
     @Bean
     public WebClient gitHubClientWithTimeout() {
@@ -57,6 +60,24 @@ public class ClientConfiguration {
                 .baseUrl(stackOverflowBaseUrl)
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, "application/json")
                 .defaultHeader(HttpHeaders.ACCEPT_ENCODING, "gzip")
+                .clientConnector(new ReactorClientHttpConnector(httpClient))
+                .build();
+    }
+
+    @Bean
+    public WebClient botClientWithTimeout() {
+        final HttpClient httpClient = HttpClient
+                .create()
+                .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, TIMEOUT)
+                .responseTimeout(Duration.ofMillis(TIMEOUT))
+                .doOnConnected(connection -> {
+                    connection.addHandlerLast(new ReadTimeoutHandler(TIMEOUT, TimeUnit.MILLISECONDS));
+                    connection.addHandlerLast(new WriteTimeoutHandler(TIMEOUT, TimeUnit.MILLISECONDS));
+                });
+
+        return WebClient.builder()
+                .baseUrl(botBaseUrl.toString())
+                .defaultHeader(HttpHeaders.CONTENT_TYPE, "application/json")
                 .clientConnector(new ReactorClientHttpConnector(httpClient))
                 .build();
     }
