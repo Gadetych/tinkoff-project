@@ -9,7 +9,7 @@ import ru.tinkoff.edu.java.scrapper.model.response.ListLinksResponse;
 import java.time.OffsetDateTime;
 import java.util.List;
 
-public interface LinksRepository {
+public interface LinkRepository {
     LinkResponse add(Long tgChatId, AddLinkRequest request);
 
     LinkResponse remove(Long tgChatId, RemoveLinkRequest request);
@@ -20,7 +20,8 @@ public interface LinksRepository {
 
     void setLastCheck(Long id);
 
-    void setLastUpdate(Long id, OffsetDateTime update);
+    void setLastUpdateDate(Long id, OffsetDateTime update);
 
     Boolean chatIsExists(Long tgChatId);
 }
+

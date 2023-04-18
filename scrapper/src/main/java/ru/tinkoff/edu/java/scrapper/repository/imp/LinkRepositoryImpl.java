@@ -9,7 +9,7 @@ import ru.tinkoff.edu.java.scrapper.model.request.AddLinkRequest;
 import ru.tinkoff.edu.java.scrapper.model.request.RemoveLinkRequest;
 import ru.tinkoff.edu.java.scrapper.model.response.LinkResponse;
 import ru.tinkoff.edu.java.scrapper.model.response.ListLinksResponse;
-import ru.tinkoff.edu.java.scrapper.repository.LinksRepository;
+import ru.tinkoff.edu.java.scrapper.repository.LinkRepository;
 
 import java.net.URI;
 import java.sql.PreparedStatement;
@@ -17,18 +17,18 @@ import java.time.OffsetDateTime;
 import java.util.List;
 
 @Repository
-public class LinksRepositoryImpl implements LinksRepository {
+public class LinkRepositoryImpl implements LinkRepository {
 
     private final JdbcTemplate jdbcTemplate;
 
-    public LinksRepositoryImpl(JdbcTemplate jdbcTemplate) {
+    public LinkRepositoryImpl(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
     @Override
     public LinkResponse add(Long tgChatId, AddLinkRequest request) {
-        String query = "INSERT INTO link_info.link(url, chat_id) " +
-                "SELECT ?,? " +
+        String query = "INSERT INTO link_info.link(url, type, chat_id) " +
+                "SELECT ?,?,? " +
                 "WHERE NOT EXISTS(" +
                 "SELECT url FROM link_info.link WHERE chat_id=? AND url=?)";
 
@@ -39,9 +39,10 @@ public class LinksRepositoryImpl implements LinksRepository {
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(query, new String[]{"id"});
             ps.setString(1, url);
-            ps.setLong(2, tgChatId);
+            ps.setString(2, request.getType());
             ps.setLong(3, tgChatId);
-            ps.setString(4, url);
+            ps.setLong(4, tgChatId);
+            ps.setString(5, url);
             return ps;
         }, keyHolder);
 
@@ -108,6 +109,7 @@ public class LinksRepositoryImpl implements LinksRepository {
                 (rs, rowNum) -> LinkResponseDto.builder()
                         .id(rs.getLong("id"))
                         .url(URI.create(rs.getString("url")))
+                        .type(rs.getString("type"))
                         .lastUpdate(rs.getObject("last_update", OffsetDateTime.class))
                         .lastCheck(rs.getObject("last_check", OffsetDateTime.class))
                         .build());
@@ -122,13 +124,12 @@ public class LinksRepositoryImpl implements LinksRepository {
     }
 
     @Override
-    public void setLastUpdate(Long id, OffsetDateTime update) {
+    public void setLastUpdateDate(Long id, OffsetDateTime update) {
         String query = "UPDATE link_info.link " +
                 "SET last_check = ?, last_update=? " +
                 "WHERE id = ?";
         jdbcTemplate.update(query, OffsetDateTime.now(), update, id);
     }
-
 
     @Override
     public Boolean chatIsExists(Long tgChatId) {
