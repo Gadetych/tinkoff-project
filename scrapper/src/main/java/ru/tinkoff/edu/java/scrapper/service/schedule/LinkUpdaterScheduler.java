@@ -17,7 +17,7 @@ import ru.tinkoff.edu.java.scrapper.model.request.LinkUpdateRequest;
 import ru.tinkoff.edu.java.scrapper.model.response.GitHubRepositoryInfoResponse;
 import ru.tinkoff.edu.java.scrapper.model.response.StackOverflowQuestionInfoResponse;
 import ru.tinkoff.edu.java.scrapper.service.LinkService;
-import ru.tinkoff.edu.java.scrapper.service.client.BotClient;
+import ru.tinkoff.edu.java.scrapper.service.SendMessageService;
 import ru.tinkoff.edu.java.scrapper.service.client.GitHubClient;
 import ru.tinkoff.edu.java.scrapper.service.client.StackOverflowClient;
 
@@ -29,11 +29,11 @@ import java.util.Map;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class LinkUpdaterScheduler{
+public class LinkUpdaterScheduler {
     private final LinkService linkService;
     private final GitHubClient gitHubClient;
     private final StackOverflowClient stackOverflowClient;
-    private final BotClient botClient;
+    private final SendMessageService sendMessageService;
     private final Parser parser;
 
     @Scheduled(fixedDelayString = "#{@schedulingIntervalMillis}")
@@ -61,10 +61,9 @@ public class LinkUpdaterScheduler{
                                 .findUpdatesByLinkIdAndLinkType(it.getId(), it.getType());
                         Map<String, String> gitHubChanges = getGitHubChanges(updates, response);
                         linkService.setGitHubLastUpdate(it.getId(), response);
-                        ResponseEntity<Void> messageForBot = sendRequestToBot(it, gitHubChanges);
+                        sendRequestToBot(it, gitHubChanges);
 
-                        log.info("Get update for: id=" + it.getId() + " --- " + it.getUrl() + " --- " + gitHubChanges +
-                                " --- bot answer: " + (messageForBot != null ? messageForBot.getStatusCode() : "null"));
+                        log.info("Get update for: id=" + it.getId() + " --- " + it.getUrl() + " --- " + gitHubChanges);
                     } else {
                         linkService.setLastCheck(it.getId());
                     }
@@ -94,10 +93,8 @@ public class LinkUpdaterScheduler{
                                     .findUpdatesByLinkIdAndLinkType(it.getId(), it.getType());
                             Map<String, String> stackChanges = getStackOverflowChanges(updates, response);
                             linkService.setStackOverflowLastUpdate(it.getId(), response);
-                            ResponseEntity<Void> messageForBot = sendRequestToBot(it, stackChanges);
-
-                            log.info("Get update for: id=" + it.getId() + " --- " + it.getUrl() + " --- " + stackChanges +
-                                    " --- bot answer: " + (messageForBot != null ? messageForBot.getStatusCode() : "null"));
+                            sendRequestToBot(it, stackChanges);
+                            log.info("Get update for: id=" + it.getId() + " --- " + it.getUrl() + " --- " + stackChanges);
                         } else {
                             linkService.setLastCheck(it.getId());
                         }
@@ -105,16 +102,14 @@ public class LinkUpdaterScheduler{
                 });
     }
 
-    @Nullable
-    private ResponseEntity<Void> sendRequestToBot(LinkResponseDto it, Map<String, String> changes) {
-        return botClient.postLinks(LinkUpdateRequest.builder()
-                        .tgChat(it.getId())
-                        .description("Update available")
-                        .url(it.getUrl()
-                                .toString())
-                        .changes(changes)
-                        .build())
-                .block();
+    private void sendRequestToBot(LinkResponseDto it, Map<String, String> changes) {
+        sendMessageService.sendMessage(LinkUpdateRequest.builder()
+                .tgChat(it.getId())
+                .description("Update available")
+                .url(it.getUrl()
+                        .toString())
+                .changes(changes)
+                .build());
     }
 
     private Map<String, String> getGitHubChanges(GitHubUpdatesDto updates,
