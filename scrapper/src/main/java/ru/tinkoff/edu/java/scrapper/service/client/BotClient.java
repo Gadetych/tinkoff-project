@@ -10,18 +10,18 @@ import ru.tinkoff.edu.java.scrapper.service.SendMessageService;
 
 //@Service
 @RequiredArgsConstructor
-public class BotClient implements SendMessageService{
+public class BotClient implements SendMessageService {
     @Qualifier("botClientWithTimeout")
     private final WebClient webClient;
 
     public void sendMessage(LinkUpdateRequest requestBody) {
         webClient.post()
-                .uri(uriBuilder -> uriBuilder.path("/updates")
-                        .build())
-                .body(Mono.just(requestBody), LinkUpdateRequest.class)
-                .accept(MediaType.APPLICATION_JSON)
-                .retrieve()
-                .toEntity(Void.class)
-                .subscribe();
+            .uri(uriBuilder -> uriBuilder.path("/updates")
+                .build())
+            .body(Mono.just(requestBody), LinkUpdateRequest.class)
+            .accept(MediaType.APPLICATION_JSON)
+            .retrieve()
+            .toEntity(Void.class)
+            .subscribe();
     }
 }

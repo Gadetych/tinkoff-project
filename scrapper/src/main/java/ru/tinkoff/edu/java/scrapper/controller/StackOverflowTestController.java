@@ -17,17 +17,16 @@ public class StackOverflowTestController {
     private final StackOverflowClient stackOverflowClient;
     private final TgChatService jpaTgChatService;
 
-
     @GetMapping("/stackoverflow/{id}")
     public StackOverflowQuestionInfoResponse getQuesInfo(@PathVariable Long id) {
         return stackOverflowClient.getStackOverflowQuestionInfo(new StackOverflowResultRecord(String.valueOf(id)))
-                           .block();
+            .block();
     }
 
     @GetMapping("/stackoverflow")
     public StackOverflowQuestionInfoResponse getQuesInfoWithNull() {
         return stackOverflowClient.getStackOverflowQuestionInfo(null)
-                                  .block();
+            .block();
     }
 
     @GetMapping("/some/{id}")

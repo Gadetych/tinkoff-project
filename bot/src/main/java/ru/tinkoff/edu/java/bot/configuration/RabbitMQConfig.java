@@ -1,7 +1,13 @@
 package ru.tinkoff.edu.java.bot.configuration;
 
+import java.util.HashMap;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
-import org.springframework.amqp.core.*;
+import org.springframework.amqp.core.Binding;
+import org.springframework.amqp.core.BindingBuilder;
+import org.springframework.amqp.core.DirectExchange;
+import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.core.QueueBuilder;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -12,9 +18,6 @@ import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import ru.tinkoff.edu.java.bot.model.request.LinkUpdateRequest;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @Configuration
 @RequiredArgsConstructor
@@ -45,22 +48,22 @@ public class RabbitMQConfig {
     @Bean
     public Queue messageQueue() {
         return QueueBuilder.durable(config.queryName())
-                .withArgument("x-dead-letter-exchange", "")
-                .withArgument("x-dead-letter-routing-key", config.queryName() + ".dlq")
-                .build();
+            .withArgument("x-dead-letter-exchange", "")
+            .withArgument("x-dead-letter-routing-key", config.queryName() + ".dlq")
+            .build();
     }
 
     @Bean
     public Queue deadLetterQueue() {
         return QueueBuilder.durable(config.queryName() + ".dlq")
-                .build();
+            .build();
     }
 
     @Bean
     public Binding binding() {
         return BindingBuilder.bind(messageQueue())
-                .to(directExchange())
-                .withQueueName();
+            .to(directExchange())
+            .withQueueName();
     }
 
     @Bean

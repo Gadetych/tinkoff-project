@@ -11,5 +11,4 @@ public class ScrapperUpdates implements UpdateService {
     public void receiver(LinkUpdateRequest update) {
         log.info("Have a message: " + update.toString());
     }
-
 }

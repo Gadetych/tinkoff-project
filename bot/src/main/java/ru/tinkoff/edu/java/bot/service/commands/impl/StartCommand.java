@@ -19,6 +19,6 @@ public class StartCommand implements Command {
 
     @Override
     public SendMessage handle(Update update) {
-        return new SendMessage(update.message().chat().id(),"пользователь зарегестрирован");
+        return new SendMessage(update.message().chat().id(), "пользователь зарегестрирован");
     }
 }

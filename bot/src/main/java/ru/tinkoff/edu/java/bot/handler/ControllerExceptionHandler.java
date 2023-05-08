@@ -28,17 +28,16 @@ public class ControllerExceptionHandler {
 
     private ApiErrorResponse getApiErrorResponse(Exception e, String code, String description) {
         ApiErrorResponse exceptionResponse = ApiErrorResponse.builder()
-                                                             .code(code)
-                                                             .description(description)
-                                                             .exceptionName(e.getClass()
-                                                                             .getName())
-                                                             .exceptionMessage(e.getMessage())
-                                                             .build();
+            .code(code)
+            .description(description)
+            .exceptionName(e.getClass()
+                .getName())
+            .exceptionMessage(e.getMessage())
+            .build();
         for (StackTraceElement stackTraceElement : e.getStackTrace()) {
             exceptionResponse.addStacktraceItem(stackTraceElement.toString());
         }
         return exceptionResponse;
     }
-
 
 }

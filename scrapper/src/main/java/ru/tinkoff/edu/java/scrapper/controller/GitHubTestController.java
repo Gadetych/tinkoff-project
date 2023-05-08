@@ -16,12 +16,12 @@ public class GitHubTestController {
     @GetMapping("/github/{user}/{repo}")
     public GitHubRepositoryInfoResponse getRepoInfo(@PathVariable String user, @PathVariable String repo) {
         return gitHubClient.getGitHubRepositoryInfo(new GitHubResultRecord(user, repo))
-                           .block();
+            .block();
     }
 
     @GetMapping("/github")
     public GitHubRepositoryInfoResponse getRepoInfoWithNull() {
         return gitHubClient.getGitHubRepositoryInfo(null)
-                           .block();
+            .block();
     }
 }
