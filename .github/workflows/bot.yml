@@ -2,11 +2,11 @@ name: Bot CI with Maven
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "master" ]
     paths:
       - 'bot/**'
   pull_request:
-    branches: [ "main" ]
+    branches: [ "master" ]
     paths:
       - 'bot/**'
 

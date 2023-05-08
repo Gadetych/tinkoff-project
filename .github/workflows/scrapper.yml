@@ -2,11 +2,11 @@ name: Scrapper CI with Maven
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "master" ]
     paths:
       - 'scrapper/**'
   pull_request:
-    branches: [ "main" ]
+    branches: [ "master" ]
     paths:
       - 'scrapper/**'
 
