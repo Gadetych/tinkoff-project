@@ -19,6 +19,6 @@ public class UntrackCommand implements Command {
 
     @Override
     public SendMessage handle(Update update) {
-        return new SendMessage(update.message().chat().id(),"отслеживание ссылки прекращено");
+        return new SendMessage(update.message().chat().id(), "отслеживание ссылки прекращено");
     }
 }

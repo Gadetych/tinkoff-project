@@ -1,5 +1,6 @@
 package ru.tinkoff.edu.java.scrapper.service.jpa;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 import ru.tinkoff.edu.java.scrapper.domain.entity.Chat;
@@ -11,8 +12,6 @@ import ru.tinkoff.edu.java.scrapper.model.response.TgChatResponse;
 import ru.tinkoff.edu.java.scrapper.repository.jpa.JpaTgChatRepository;
 import ru.tinkoff.edu.java.scrapper.service.TgChatService;
 
-import java.util.List;
-
 @RequiredArgsConstructor
 public class JpaTgChatService implements TgChatService {
     private final JpaTgChatRepository chatRepository;
@@ -22,12 +21,12 @@ public class JpaTgChatService implements TgChatService {
     @Transactional
     public TgChatResponse registerChat(Long tgChatId) {
         chatRepository.findById(tgChatId)
-                .ifPresent(it -> {
-                    throw new DataAlreadyExistException("Чат с id=" + tgChatId + " уже существует");
-                });
+            .ifPresent(it -> {
+                throw new DataAlreadyExistException("Чат с id=" + tgChatId + " уже существует");
+            });
         Chat savedChat = chatRepository.save(Chat.builder()
-                .tgChatId(tgChatId)
-                .build());
+            .tgChatId(tgChatId)
+            .build());
         return chatMapper.chatToTgChatResponse(savedChat);
     }
 
@@ -35,11 +34,11 @@ public class JpaTgChatService implements TgChatService {
     @Transactional
     public TgChatResponse removeChat(Long tgChatId) {
         chatRepository.findById(tgChatId)
-                .orElseThrow(() -> new DataNotFoundException("Чат с id=" + tgChatId + " не найден"));
+            .orElseThrow(() -> new DataNotFoundException("Чат с id=" + tgChatId + " не найден"));
         chatRepository.deleteById(tgChatId);
         return TgChatResponse.builder()
-                .tgChatId(tgChatId)
-                .build();
+            .tgChatId(tgChatId)
+            .build();
     }
 
     @Override

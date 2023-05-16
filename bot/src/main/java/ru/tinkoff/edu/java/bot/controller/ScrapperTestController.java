@@ -2,7 +2,14 @@ package ru.tinkoff.edu.java.bot.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import ru.tinkoff.edu.java.bot.model.request.AddLinkRequest;
 import ru.tinkoff.edu.java.bot.model.request.RemoveLinkRequest;
 import ru.tinkoff.edu.java.bot.model.response.LinkResponse;
@@ -19,30 +26,36 @@ public class ScrapperTestController {
     @GetMapping("/links")
     public ResponseEntity<ListLinksResponse> getLinks(@RequestHeader Long thChatId) {
         return scrapperClient.getLinks(thChatId)
-                             .block();
+            .block();
     }
 
     @PostMapping("/links")
-    public ResponseEntity<LinkResponse> postLinks(@RequestHeader Long thChatId, @RequestBody AddLinkRequest addLinkRequest) {
+    public ResponseEntity<LinkResponse> postLinks(
+        @RequestHeader Long thChatId,
+        @RequestBody AddLinkRequest addLinkRequest
+    ) {
         return scrapperClient.postLinks(thChatId, addLinkRequest)
-                             .block();
+            .block();
     }
 
     @DeleteMapping("/links")
-    public ResponseEntity<LinkResponse> deleteLinks(@RequestHeader Long thChatId, @RequestBody RemoveLinkRequest removeLinkRequest) {
+    public ResponseEntity<LinkResponse> deleteLinks(
+        @RequestHeader Long thChatId,
+        @RequestBody RemoveLinkRequest removeLinkRequest
+    ) {
         return scrapperClient.deleteLinks(thChatId, removeLinkRequest)
-                             .block();
+            .block();
     }
 
     @PostMapping("/tg-chat/{id}")
     public ResponseEntity<Void> registerChat(@PathVariable(value = "id") Long thChatId) {
         return scrapperClient.registerChat(thChatId)
-                             .block();
+            .block();
     }
 
     @DeleteMapping("/tg-chat/{id}")
     public ResponseEntity<Void> deleteChat(@PathVariable(value = "id") Long thChatId) {
         return scrapperClient.deleteChat(thChatId)
-                             .block();
+            .block();
     }
 }

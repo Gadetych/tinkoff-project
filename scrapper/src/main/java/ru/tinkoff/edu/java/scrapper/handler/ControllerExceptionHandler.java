@@ -21,8 +21,8 @@ public class ControllerExceptionHandler {
     }
 
     @ExceptionHandler({
-            BadRequestException.class,
-            DataAlreadyExistException.class})
+        BadRequestException.class,
+        DataAlreadyExistException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<ApiErrorResponse> handle(RuntimeException e) {
         ApiErrorResponse exceptionResponse = getApiErrorResponse(e, "400", "Некорректные параметры запроса");
@@ -31,17 +31,16 @@ public class ControllerExceptionHandler {
 
     private ApiErrorResponse getApiErrorResponse(Exception e, String code, String description) {
         ApiErrorResponse exceptionResponse = ApiErrorResponse.builder()
-                                                             .code(code)
-                                                             .description(description)
-                                                             .exceptionName(e.getClass()
-                                                                             .getName())
-                                                             .exceptionMessage(e.getMessage())
-                                                             .build();
+            .code(code)
+            .description(description)
+            .exceptionName(e.getClass()
+                .getName())
+            .exceptionMessage(e.getMessage())
+            .build();
         for (StackTraceElement stackTraceElement : e.getStackTrace()) {
             exceptionResponse.addStacktraceItem(stackTraceElement.toString());
         }
         return exceptionResponse;
     }
-
 
 }

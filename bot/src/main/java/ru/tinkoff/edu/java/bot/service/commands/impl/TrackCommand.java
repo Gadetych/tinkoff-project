@@ -19,6 +19,6 @@ public class TrackCommand implements Command {
 
     @Override
     public SendMessage handle(Update update) {
-        return new SendMessage(update.message().chat().id(),"ссылка ослеживается");
+        return new SendMessage(update.message().chat().id(), "ссылка ослеживается");
     }
 }

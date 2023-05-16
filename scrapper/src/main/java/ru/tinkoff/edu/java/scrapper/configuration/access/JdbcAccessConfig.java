@@ -16,8 +16,10 @@ import ru.tinkoff.edu.java.scrapper.service.jdbc.JdbcTgChatService;
 public class JdbcAccessConfig {
 
     @Bean
-    public LinkService linkService(JdbcLinkRepository jdbcLinkRepository,
-                                   JdbcLinkUpdatesRepository jdbcLinkUpdatesRepository) {
+    public LinkService linkService(
+        JdbcLinkRepository jdbcLinkRepository,
+        JdbcLinkUpdatesRepository jdbcLinkUpdatesRepository
+    ) {
         return new JdbcLinksService(jdbcLinkRepository, jdbcLinkUpdatesRepository);
     }
 

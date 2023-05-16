@@ -1,9 +1,12 @@
 package ru.tinkoff.edu.java.scrapper.model.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.*;
-
 import java.time.OffsetDateTime;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Setter
@@ -17,19 +20,6 @@ public class GitHubRepositoryInfoResponse {
     private String fullName;
     @JsonProperty("owner")
     private Owner owner;
-
-    @Getter
-    @Setter
-    @AllArgsConstructor
-    @NoArgsConstructor
-    @Builder
-    private static class Owner {
-        @JsonProperty("login")
-        private String ownerLogin;
-        @JsonProperty("id")
-        private String ownerId;
-    }
-
     @JsonProperty("created_at")
     private OffsetDateTime createdAt;
     @JsonProperty("updated_at")
@@ -40,5 +30,17 @@ public class GitHubRepositoryInfoResponse {
     private Integer forksCount;
     @JsonProperty("watchers")
     private Integer watchers;
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    private static class Owner {
+        @JsonProperty("login")
+        private String ownerLogin;
+        @JsonProperty("id")
+        private String ownerId;
+
+    }
 }
 

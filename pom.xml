@@ -13,7 +13,6 @@
         <module>bot</module>
         <module>link-parser</module>
         <module>scrapper</module>
-        <module>scrapper-jooq</module>
     </modules>
 
     <properties>
@@ -28,6 +27,7 @@
         <testcontainers.version>1.17.6</testcontainers.version>
         <org.mapstruct.version>1.5.4.Final</org.mapstruct.version>
         <project-lombok.version>1.18.26</project-lombok.version>
+        <maven-checkstyle-plugin.version>3.2.2</maven-checkstyle-plugin.version>
     </properties>
 
     <dependencyManagement>
@@ -131,6 +131,18 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>${maven-surefire-failsafe.version}</version>
+                    <configuration>
+                        <reuseForks>false</reuseForks>
+                        <forkCount>1</forkCount>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-checkstyle-plugin</artifactId>
+                    <version>${maven-checkstyle-plugin.version}</version>
+                    <configuration>
+                        <configLocation>checkstyle.xml</configLocation>
+                    </configuration>
                 </plugin>
             </plugins>
         </pluginManagement>
