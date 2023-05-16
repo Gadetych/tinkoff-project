@@ -7,6 +7,7 @@ import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.request.SetMyCommands;
+import io.micrometer.core.instrument.Counter;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import ru.tinkoff.edu.java.bot.configuration.TelegramConfig;
@@ -18,10 +19,12 @@ import ru.tinkoff.edu.java.bot.service.commands.impl.UnknownCommand;
 public class BotStarter implements Bot {
     private final TelegramBot bot;
     private final CommandList commandList;
+    private final Counter counter;
 
-    public BotStarter(TelegramConfig telegramConfig, CommandList commandList) {
+    public BotStarter(TelegramConfig telegramConfig, CommandList commandList, Counter counter) {
         this.bot = new TelegramBot(telegramConfig.token());
         this.commandList = commandList;
+        this.counter = counter;
         botCommands();
     }
 
@@ -39,6 +42,7 @@ public class BotStarter implements Bot {
             Message message = update.message();
             if (message != null) {
                 SendMessage sendMessage = handleByCommand(update, message);
+                counter.increment();
                 bot.execute(sendMessage);
             }
         });
